@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.moin.currency_converter.android"
+    namespace  = "com.moin.currency_converter.android"
     compileSdk = 33
     defaultConfig {
         applicationId = "com.moin.currency_converter.android"
@@ -19,7 +19,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.0"
+        kotlinCompilerExtensionVersion = "1.4.6"
     }
     packagingOptions {
         resources {

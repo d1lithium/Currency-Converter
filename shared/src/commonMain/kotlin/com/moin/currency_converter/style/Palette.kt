@@ -1,6 +1,7 @@
 package com.moin.currency_converter.style
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.WhitePoint
 
 object  Palette {
     val Gray = Color.DarkGray

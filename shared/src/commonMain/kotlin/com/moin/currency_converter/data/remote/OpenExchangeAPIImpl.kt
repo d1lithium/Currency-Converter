@@ -20,10 +20,10 @@ class OpenExchangeAPIImpl:OpenExchangeAPI {
     }
 
     private val client = HttpClient {
-        expectSuccess = true;
+        expectSuccess = true
 
         install(HttpTimeout) {
-            val timeout = 30000L
+            val timeout = 300000L
             connectTimeoutMillis = timeout
             requestTimeoutMillis = timeout
             socketTimeoutMillis = timeout
@@ -35,7 +35,7 @@ class OpenExchangeAPIImpl:OpenExchangeAPI {
     private fun HttpRequestBuilder.openexchange(path:String){
         url {
             //takeFrom("https://openexchangerates.org/api/")
-            takeFrom("http://10.0.2.2:3000/")
+            takeFrom("http://192.168.100.11:3000/")
         encodedPath = path
         }
     }

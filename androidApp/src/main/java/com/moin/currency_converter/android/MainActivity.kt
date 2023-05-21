@@ -16,12 +16,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moin.currency_converter.Greeting
 import com.moin.currency_converter.data.Currency
 import com.moin.currency_converter.data.CurrencyListState
 import com.moin.currency_converter.domain.CurrencyViewModel
+import com.moin.currency_converter.presentation.*
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 @Composable
 fun MyApplicationTheme(
@@ -66,12 +70,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApplicationTheme {
+            MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = Color.White
                 ) {
-                    CurrencyScreen(viewModel = CurrencyViewModel())
+                   commonView()
                 }
             }
         }
@@ -86,13 +90,13 @@ fun Greeting(text: String) {
 @Preview
 @Composable
 fun DefaultPreview() {
-    MyApplicationTheme {
-CurrencyScreen(viewModel = CurrencyViewModel())
+    MaterialTheme {
+        commonView()
     }
 }
-@Preview
+
 @Composable
-internal fun CurrencyScreen(viewModel: CurrencyViewModel){
+internal fun CurrencyScreen( viewModel: CurrencyViewModel){
     val state = viewModel.state.collectAsState()
     Column(modifier = Modifier.padding(16.dp),
     verticalArrangement = Arrangement.Center,
@@ -131,5 +135,6 @@ internal fun CurrencyScreen(viewModel: CurrencyViewModel){
 fun CurrencySelector(currency: Currency, onCurrencySelected: (Currency) -> Unit) {
     // Implement currency selector UI
 }
+
 
 

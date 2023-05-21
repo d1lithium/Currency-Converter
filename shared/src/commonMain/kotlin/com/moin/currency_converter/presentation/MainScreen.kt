@@ -4,10 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.moin.currency_converter.data.CurrencyListState
 import com.moin.currency_converter.domain.CurrencyViewModel
@@ -17,20 +18,32 @@ import com.moin.currency_converter.domain.CurrencyViewModel
 internal fun MainScreen(viewModel: CurrencyViewModel){
 
     val state = viewModel.state.collectAsState()
+    var inputText by remember { mutableStateOf(TextFieldValue("")) }
+    Column(
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ){
+        TextField(modifier = Modifier.padding(16.dp).height(60.dp).fillMaxSize(),
+            value = inputText,
+            onValueChange = {
+                inputText = it
+            },
+            label = {Text(text = "Input Amount")},
+            placeholder = {Text(text = "#######.##")},
+            singleLine = true
+
+            )
+
+    }
     Column(modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(16.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(64.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
-                val amount = 12
-                if (amount != null) {
 
-                }
             }
         ) {
             Text("Convert")
