@@ -19,6 +19,12 @@ class OpenExchangeAPIImpl:OpenExchangeAPI {
        }.body()
     }
 
+    override suspend fun getLatest(baseCurrency: String): JsonObject {
+        return client.post {
+            openexchange("latest.json")
+        }.body()
+    }
+
     private val client = HttpClient {
         expectSuccess = true
 
@@ -39,4 +45,5 @@ class OpenExchangeAPIImpl:OpenExchangeAPI {
         encodedPath = path
         }
     }
+
 }

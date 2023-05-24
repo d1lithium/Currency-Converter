@@ -12,7 +12,9 @@ import com.moin.currency_converter.domain.CurrencyViewModel
 fun commonView(){
     val viewModel = CurrencyViewModel()
     MaterialTheme (
-        MaterialTheme.colors.copy()
+        MaterialTheme.colors.copy(
+            primary = Color.Magenta
+        )
     ){
         Surface(
             modifier = Modifier.fillMaxSize(),

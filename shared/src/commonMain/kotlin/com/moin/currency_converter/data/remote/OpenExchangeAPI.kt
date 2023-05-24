@@ -5,4 +5,5 @@ import kotlinx.serialization.json.JsonObject
 
 interface OpenExchangeAPI {
     suspend fun getCurrencies(): JsonObject
+    suspend fun getLatest(baseCurrency: String): JsonObject
 }
