@@ -22,7 +22,7 @@ actual fun DropDownView(
     expanded: Boolean,
     listItems: List<String>,
     selectedItem: String
-) {
+): Pair<Boolean,String> {
     val contextForToast = LocalContext.current
     var mutableExpanded  by remember { mutableStateOf(expanded) }
     var selectedItem by remember { mutableStateOf(selectedItem) }
@@ -66,4 +66,5 @@ actual fun DropDownView(
             }
         }
     }
+    return Pair(mutableExpanded,selectedItem)
 }

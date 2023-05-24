@@ -8,4 +8,4 @@ expect fun DropDownView(
     modifier: Modifier,
     expanded: Boolean,
     listItems: List<String>,
-    selectedItem: String)
+    selectedItem: String): Pair<Boolean,String>
