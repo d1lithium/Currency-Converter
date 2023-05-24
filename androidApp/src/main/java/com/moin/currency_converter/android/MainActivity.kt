@@ -95,6 +95,7 @@ fun DefaultPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun CurrencyScreen( viewModel: CurrencyViewModel){
     val state = viewModel.state.collectAsState()
@@ -106,6 +107,9 @@ internal fun CurrencyScreen( viewModel: CurrencyViewModel){
         Spacer(modifier = Modifier.height(16.dp))
 
         Spacer(modifier = Modifier.height(16.dp))
+        ExposedDropdownMenuBox(expanded = true, onExpandedChange = {it}) {
+
+        }
         Button(
             onClick = {
                 val amount = 12

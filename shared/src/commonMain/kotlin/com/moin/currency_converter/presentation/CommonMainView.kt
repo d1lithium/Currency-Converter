@@ -7,14 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.moin.currency_converter.domain.CurrencyViewModel
-import com.moin.currency_converter.style.Palette
 
 @Composable
 fun commonView(){
     val viewModel = CurrencyViewModel()
     MaterialTheme (
-        MaterialTheme.colors.copy(
-        )
+        MaterialTheme.colors.copy()
     ){
         Surface(
             modifier = Modifier.fillMaxSize(),

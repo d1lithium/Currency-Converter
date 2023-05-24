@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace  = "com.moin.currency_converter.android"
+    namespace = "com.moin.currency_converter.android"
     compileSdk = 33
     defaultConfig {
         applicationId = "com.moin.currency_converter.android"

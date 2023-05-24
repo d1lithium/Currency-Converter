@@ -9,16 +9,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Application
 import platform.UIKit.UIViewController
 
+
 fun MainViewiOSController(): UIViewController =
     Application(title = "Currency-Converter") {
         Column {
             // To skip upper part of screen.
             Spacer(modifier = Modifier.height(40.dp))
-         /*   Box(
-                modifier = Modifier
-                    .height(40.dp)
-            )
-          */
             AppViewiOS()
         }
     }
