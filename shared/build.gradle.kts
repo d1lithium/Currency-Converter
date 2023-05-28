@@ -171,3 +171,6 @@ android {
         exclude("META-INF/*")
     }
 }
+dependencies {
+    testImplementation("org.testng:testng:6.9.6")
+}
