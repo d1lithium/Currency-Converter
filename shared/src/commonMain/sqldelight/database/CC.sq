@@ -1,0 +1,41 @@
+CREATE TABLE convertedcurrency (
+  id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  base TEXT NOT NULL,
+  code TEXT NOT NULL,
+  name TEXT NOT NULL,
+  value TEXT NOT NULL,
+  created INTEGER NOT NULL
+
+);
+
+CREATE INDEX cc_name ON convertedcurrency(code);
+
+getAllCCRows:
+SELECT *
+FROM convertedcurrency;
+
+getCCbyCode:
+SELECT *
+FROM convertedcurrency
+WHERE code = ?;
+
+insertCC:
+INSERT OR REPLACE
+INTO convertedcurrency(
+    base,
+    code,
+    name,
+    value,
+    created
+) VALUES(?, ?, ?, ?,?);
+
+deleteCCbyId:
+DELETE FROM convertedcurrency
+WHERE id = ?;
+
+deleteCCbyCode:
+DELETE FROM convertedcurrency
+WHERE code = ?;
+
+deleteAllCCRows:
+DELETE FROM convertedcurrency;

@@ -4,6 +4,8 @@ plugins {
     kotlin("plugin.serialization")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("com.squareup.sqldelight")
+
 
 }
 version = "1.0-SNAPSHOT"
@@ -19,10 +21,14 @@ kotlin {
     ios {
         binaries {
             framework {
+               // isStatic = true
                 baseName = "shared"
+
             }
         }
     }
+
+
 
 
 
@@ -39,6 +45,8 @@ kotlin {
             baseName = "shared"
         }
     }
+
+
     
     sourceSets {
         val commonMain by getting {
@@ -47,6 +55,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-server-http-redirect:$ktorVersion")
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
@@ -55,6 +64,13 @@ kotlin {
                 implementation("org.jetbrains.compose.components:components-resources:1.3.0-beta04-dev879")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
                 api("io.github.qdsfdhvh:image-loader:1.2.8")
+                implementation("com.squareup.sqldelight:runtime:1.5.5")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+             //   implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+                //implementation ("io.mockk:mockk:1.12.0")
+
+
 
 
 
@@ -65,6 +81,9 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("io.mockk:mockk:1.4.1")
+                implementation("junit:junit:4.13.2")
+
             }
         }
         val androidMain by getting {
@@ -78,6 +97,12 @@ kotlin {
                 implementation("androidx.compose.foundation:foundation:1.2.1")
                 implementation("androidx.activity:activity-compose:1.5.1")
                 implementation("androidx.compose.material:material:1.4.3")
+                implementation("androidx.appcompat:appcompat:1.6.1")
+                implementation("com.squareup.sqldelight:android-driver:1.5.5")
+                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+                implementation("io.mockk:mockk-android:1.12.0")
+
 
             }
 
@@ -95,6 +120,9 @@ kotlin {
                 implementation ("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
                 implementation("io.ktor:ktor-client-darwin:$ktorVersion")
                 implementation("io.ktor:ktor-client-ios:$ktorVersion")
+                implementation("com.squareup.sqldelight:native-driver:1.5.5")
+
+
 
             }
             iosX64Main.dependsOn(this)
@@ -109,9 +137,16 @@ kotlin {
 
 
 
-
     }
 }
+
+sqldelight {
+    database("CCDatabase") {
+        packageName = "com.moin.currency_converter"
+        sourceFolders = listOf("sqldelight")
+    }
+}
+
 
 android {
     namespace = "com.moin.currency_converter"
@@ -127,11 +162,12 @@ android {
         kotlinCompilerExtensionVersion = "1.4.6"
     }
 
-  compileOptions {
+    compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-dependencies {
-    testImplementation("junit:junit:4.12")
-}
+    packagingOptions {
+        exclude("META-INF/*")
+        exclude("META-INF/*")
+    }
 }

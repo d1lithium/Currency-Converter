@@ -16,5 +16,7 @@ object  Palette {
     val TranslucentBlack = Color(0, 0, 0, 60)
     val TranslucentWhite = Color(255, 255, 255, 20)
     val SemiWhite = Color(255, 255, 255, 30)
+    val LightBlue = Color(100, 154, 247)
+    val DarkBlue = Color(29, 74, 161)
 
 }
