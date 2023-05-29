@@ -26,13 +26,11 @@ import com.moin.currency_converter.data.CurrencyListState
 import com.moin.currency_converter.domain.CurrencyViewModel
 import com.moin.currency_converter.getFilteredCurrencyList
 import com.moin.currency_converter.style.Palette
-import androidx.compose.ui.unit.max
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun MainScreen(viewModel: CurrencyViewModel) {
-    val state = viewModel.state.collectAsState()
-    val gridState = viewModel.gridState.collectAsState()
+    val state by viewModel.state.collectAsState()
+    val gridState by viewModel.gridState.collectAsState()
     var inputText by remember { mutableStateOf("") }
     val pattern = remember { Regex("^(?:0|[1-9]\\d+|)?(?:.?\\d{0,2})?$") }
     val maxChar = 10
@@ -41,15 +39,16 @@ internal fun MainScreen(viewModel: CurrencyViewModel) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.padding(16.dp)
     ) {
         TextField(
-            modifier = Modifier.padding(16.dp).height(60.dp).fillMaxSize(),
+            modifier = Modifier.height(60.dp).fillMaxSize(),
             value = inputText,
             onValueChange = { if (it.matches(pattern) && it.length <= maxChar) inputText = it },
             label = { Text(text = "Input Amount") },
             placeholder = { Text(text = "#######.##") },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         )
     }
 
@@ -59,7 +58,7 @@ internal fun MainScreen(viewModel: CurrencyViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(80.dp))
-        when (val result = state.value) {
+        when (val result = state) {
             is CurrencyListState.Error -> {
                 Text(text = "Error: ${result.message}")
             }
@@ -78,7 +77,7 @@ internal fun MainScreen(viewModel: CurrencyViewModel) {
                     viewModel.getLatest(dropDownPair.second, inputText)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                when (val result = gridState.value) {
+                when (val result = gridState) {
                     is CurrencyGridState.Error -> {
                         Text(text = "Error: ${result.message}")
                     }
@@ -111,7 +110,7 @@ fun DropDown(result: List<Currency>): Pair<Boolean, String> {
     val expanded by remember { mutableStateOf(false) }
     val selectedItem by remember { mutableStateOf(currencyListItems[0]) }
     val (isExpanded, selectedCurrency) = DropDownView(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.background(color = Palette.LightBlue).fillMaxSize(),
         expanded = expanded,
         listItems = currencyListItems,
         selectedItem = selectedItem

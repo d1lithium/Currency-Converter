@@ -1,5 +1,6 @@
 package com.moin.currency_converter.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +28,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxWidth
+import com.moin.currency_converter.style.Palette
 
 
 @Composable
@@ -39,18 +45,22 @@ actual fun DropDownView(
     var mutableExpanded  by remember { mutableStateOf(expanded)}
     var selectedItem by remember { mutableStateOf(selectedItem) }
 
-
-
-    Box {
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Palette.LightBlue,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .background(Palette.LightBlue, shape = RoundedCornerShape(8.dp))
+    ) {
         ClickableText(
             text = buildAnnotatedString {
-                if (selectedItem == null) {
-                    withStyle(SpanStyle(color = Color.Gray)) {
-                        append("Select currency")
+                    withStyle(SpanStyle(color = Color.Black)) {
+                        append(selectedItem)
                     }
-                } else {
-                    append(selectedItem!!)
-                }
             },
             onClick = {
                 mutableExpanded = !mutableExpanded
@@ -61,7 +71,7 @@ actual fun DropDownView(
         )
         Icon(
             imageVector = if (mutableExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-            contentDescription = "Toggle Dropdown",
+            contentDescription = "drop down icon",
             tint = Color.Black,
             modifier = Modifier
                 .align(Alignment.CenterEnd)
