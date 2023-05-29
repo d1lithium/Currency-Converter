@@ -166,11 +166,4 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    packagingOptions {
-        exclude("META-INF/*")
-        exclude("META-INF/*")
-    }
-}
-dependencies {
-    testImplementation("org.testng:testng:6.9.6")
 }
