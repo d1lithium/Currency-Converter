@@ -1,18 +1,14 @@
 package com.moin.currency_converter.data.remote
 
-import com.moin.currency_converter.data.Currency
+import com.moin.currency_converter.app_id
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.request
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.plugins.httpsredirect.HttpsRedirect
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.buildJsonObject
-
 class OpenExchangeAPIImpl:OpenExchangeAPI {
 
     override suspend fun getCurrencies(): JsonObject {
@@ -30,6 +26,7 @@ class OpenExchangeAPIImpl:OpenExchangeAPI {
     override suspend fun getHistoricalRates(): JsonObject {
         return client.get {
             openexchange(Routes.historical)
+            //openExchangeStatic(Routes.latest)
         }.body<JsonObject>()["rates"] as JsonObject
     }
 
@@ -57,11 +54,11 @@ class OpenExchangeAPIImpl:OpenExchangeAPI {
         url {
             takeFrom("https://openexchangerates.org/api/")
             //takeFrom("http://192.168.100.11:3000/")
-            encodedParameters.append("app_id","f213dc6df7b34824b622d4684cfe8412")
-            encodedParameters.append("base","USD")
-            encodedParameters.append("symbols","AED,GBP,EUR,FKP,GEL")
-            encodedParameters.append("prettyprint", false.toString())
-            encodedParameters.append("show_alternative", false.toString())
+            parameters.append("app_id", app_id)
+            parameters.append("base","USD")
+            parameters.append("symbols","AED,GBP,EUR,FKP,GEL")
+            parameters.append("prettyprint", false.toString())
+            parameters.append("show_alternative", false.toString())
             encodedPath = path
         }
     }
