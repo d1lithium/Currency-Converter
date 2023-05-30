@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moin.currency_converter.MainViewAndroid
+import com.moin.currency_converter.PermissionUtil
 import com.moin.currency_converter.data.Currency
 import com.moin.currency_converter.data.CurrencyListState
 import com.moin.currency_converter.data.local.DatabaseDriverFactory
@@ -74,7 +75,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                   MainViewAndroid( DatabaseDriverFactory(applicationContext).createDriver())
+                        MainViewAndroid( DatabaseDriverFactory(applicationContext).createDriver())
+
                 }
             }
         }
@@ -92,51 +94,6 @@ fun DefaultPreview() {
     MaterialTheme {
      //   commonView()
     }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-internal fun CurrencyScreen( viewModel: CurrencyViewModel){
-    val state = viewModel.state.collectAsState()
-    Column(modifier = Modifier.padding(16.dp),
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Spacer(modifier = Modifier.height(16.dp))
-        ExposedDropdownMenuBox(expanded = true, onExpandedChange = {it}) {
-
-        }
-        Button(
-            onClick = {
-                val amount = 12
-                if (amount != null) {
-
-                }
-            }
-        ) {
-            Text("Convert")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        when (val result = state.value) {
-            is CurrencyListState.Success -> {
-                Text("Result: ${result.currencies}")
-            }
-            is CurrencyListState.Error -> {
-                Text("Error: ${result.message}")
-            }
-            is CurrencyListState.Loading -> {
-                CircularProgressIndicator()
-            }
-        }
-    }
-}
-
-@Composable
-fun CurrencySelector(currency: Currency, onCurrencySelected: (Currency) -> Unit) {
-    // Implement currency selector UI
 }
 
 

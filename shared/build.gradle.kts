@@ -21,7 +21,7 @@ kotlin {
     ios {
         binaries {
             framework {
-               // isStatic = true
+                // isStatic = true
                 baseName = "shared"
 
             }
@@ -47,11 +47,11 @@ kotlin {
     }
 
 
-    
+
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation ("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib-common:$kotlinVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
@@ -66,26 +66,15 @@ kotlin {
                 api("io.github.qdsfdhvh:image-loader:1.2.8")
                 implementation("com.squareup.sqldelight:runtime:1.5.5")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
-             //   implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
-                //implementation ("io.mockk:mockk:1.12.0")
-
-
-
-
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
+                implementation("pub.devrel:easypermissions:3.0.0")
+                //   implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
 
 
             }
 
         }
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("io.mockk:mockk:1.4.1")
-                implementation("junit:junit:4.13.2")
 
-            }
-        }
         val androidMain by getting {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.5.1")
@@ -96,19 +85,42 @@ kotlin {
                 implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
                 implementation("androidx.compose.foundation:foundation:1.2.1")
                 implementation("androidx.activity:activity-compose:1.5.1")
+                implementation("androidx.compose.ui:ui-test-junit4:1.2.1")
                 implementation("androidx.compose.material:material:1.4.3")
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("com.squareup.sqldelight:android-driver:1.5.5")
-                implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
                 implementation("io.mockk:mockk-android:1.12.0")
+                implementation("androidx.test:runner:1.5.2")
+                implementation("androidx.test:rules:1.5.0")
+                // Optional -- UI testing with Espresso
+                implementation("androidx.test.espresso:espresso-core:3.5.1")
+                // Optional -- UI testing with UI Automator
+                implementation("androidx.test.uiautomator:uiautomator:2.3.0-alpha03")
+                // Optional -- UI testing with Compose
+                implementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
+                implementation("pub.devrel:easypermissions:3.0.0")
+                implementation("junit:junit:4.12")
+                implementation("androidx.arch.core:core-testing:2.2.0-alpha01")
+
 
 
             }
 
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation("junit:junit:4.13.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+                //implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
+
+            }
+        }
         val androidTest by getting {
-            dependencies {  }
+            dependencies {
+                dependsOn(androidMain)
+            }
         }
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -117,11 +129,10 @@ kotlin {
         val iosMain by getting {
             dependencies {
                 dependsOn(commonMain)
-                implementation ("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+                implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
                 implementation("io.ktor:ktor-client-darwin:$ktorVersion")
                 implementation("io.ktor:ktor-client-ios:$ktorVersion")
                 implementation("com.squareup.sqldelight:native-driver:1.5.5")
-
 
 
             }
@@ -134,10 +145,9 @@ kotlin {
         val iosSimulatorArm64Test by getting
 
 
-
-
-
     }
+
+
 }
 
 sqldelight {
@@ -148,12 +158,15 @@ sqldelight {
 }
 
 
+
 android {
     namespace = "com.moin.currency_converter"
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments.put("networkPermission", "true")
     }
     buildFeatures {
         compose = true
@@ -166,4 +179,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = true
+    }
 }
+

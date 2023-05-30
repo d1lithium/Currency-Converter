@@ -14,6 +14,8 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
     buildFeatures {
         compose = true
@@ -31,6 +33,9 @@ android {
             isMinifyEnabled = false
         }
     }
+    testOptions{
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -41,4 +46,7 @@ dependencies {
     implementation("androidx.compose.foundation:foundation:1.2.1")
     implementation("androidx.compose.material:material:1.2.1")
     implementation("androidx.activity:activity-compose:1.5.1")
+    implementation("androidx.test:runner:1.4.0")
+    implementation("pub.devrel:easypermissions:3.0.0")
+
 }

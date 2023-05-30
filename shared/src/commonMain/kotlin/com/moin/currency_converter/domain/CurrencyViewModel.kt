@@ -16,14 +16,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.JsonObject
 import kotlin.math.roundToInt
 
 class CurrencyViewModel(sqlDriver: SqlDriver) {
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
-    private val exchangeAPI = OpenExchangeAPIImpl()
-    private val localCCDataSource = LocalCCDataSourceImpl(CCDatabase(sqlDriver))
+    var exchangeAPI = OpenExchangeAPIImpl()
+    var localCCDataSource = LocalCCDataSourceImpl(CCDatabase(sqlDriver))
     val state = MutableStateFlow<CurrencyListState>(CurrencyListState.Loading)
     val gridState = MutableStateFlow<CurrencyGridState>(CurrencyGridState.Loading)
 
@@ -39,6 +42,7 @@ class CurrencyViewModel(sqlDriver: SqlDriver) {
             }
         }
     }
+
 
     fun getLatest(base: String, value: String) {
         viewModelScope.launch {
@@ -61,27 +65,6 @@ class CurrencyViewModel(sqlDriver: SqlDriver) {
         }
     }
 
-    fun loadCCList(): List<LocalConvertedCurrency> {
-        var localCCList: List<LocalConvertedCurrency> = emptyList()
-        viewModelScope.launch(Dispatchers.Main) {
-            try {
-                localCCList = localCCDataSource.getAllCCRows()
-                if (localCCList.isEmpty()) {
-                    updateLocalCCRows(true)
-                } else {
-                    val isDataExpired = isDataExpired(localCCList.first().created)
-                    if (isDataExpired) {
-                        updateLocalCCRows(false)
-                    }
-                }
-                println("historical rates: $localCCList")
-            } catch (e: Exception) {
-                println("something went wrong: ${e.message}")
-            }
-        }
-        return localCCList
-    }
-
     private suspend fun updateLocalCCRows(isLocalDBEmpty: Boolean) {
         val latestConvObj = exchangeAPI.getHistoricalRates()
 
@@ -101,8 +84,7 @@ class CurrencyViewModel(sqlDriver: SqlDriver) {
     private fun isDataExpired(created: LocalDateTime): Boolean {
         val diff = DateTimeUtil.toEpochMillis(DateTimeUtil.now()) -
                 DateTimeUtil.toEpochMillis(created)
-       // return diff >= 1800000
-        return diff >= 300000
+        return diff >= 1800000
     }
 
     private fun parseCurrencies(currJsonObj: JsonObject): List<Currency> {
@@ -155,5 +137,7 @@ class CurrencyViewModel(sqlDriver: SqlDriver) {
 
         return convCurrencyList
     }
+
+
 
 }
