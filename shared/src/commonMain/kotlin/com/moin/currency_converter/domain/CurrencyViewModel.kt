@@ -60,7 +60,7 @@ class CurrencyViewModel(sqlDriver: SqlDriver) {
                 gridState.emit(CurrencyGridState.Success(convCurrencyList))
             } catch (e: Exception) {
                 e.printStackTrace()
-                CurrencyGridState.Error(e.message ?: "something went wrong")
+                gridState.emit(CurrencyGridState.Error(e.message ?: "something went wrong"))
             }
         }
     }
