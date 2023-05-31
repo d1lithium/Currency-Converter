@@ -68,6 +68,13 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
                 implementation("pub.devrel:easypermissions:3.0.0")
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-json:$ktorVersion")
+            //    implementation("io.ktor:ktor-client-json-jvm:$ktorVersion")
+                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+                implementation("dev.tmapps:konnection:1.1.10")
+              //  implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
+              //  implementation("com.github.ln-12:multiplatform-connectivity-status:1.2.0")
                 //   implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.1")
 
 

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moin.currency_converter.MainViewAndroid
 import com.moin.currency_converter.data.local.DatabaseDriverFactory
+import dev.tmapps.konnection.Konnection
 
 @Composable
 fun MyApplicationTheme(
@@ -60,6 +61,7 @@ fun MyApplicationTheme(
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        val konnection = Konnection(baseContext, enableDebugLog = true)
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
@@ -67,7 +69,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                        MainViewAndroid( DatabaseDriverFactory(applicationContext).createDriver())
+                    MainViewAndroid( DatabaseDriverFactory(applicationContext).createDriver(),konnection )
 
                 }
             }

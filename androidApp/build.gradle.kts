@@ -48,5 +48,7 @@ dependencies {
     implementation("androidx.activity:activity-compose:1.5.1")
     implementation("androidx.test:runner:1.4.0")
     implementation("pub.devrel:easypermissions:3.0.0")
+    implementation("dev.tmapps:konnection:1.1.10")
+
 
 }

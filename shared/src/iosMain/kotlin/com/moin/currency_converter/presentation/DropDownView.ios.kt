@@ -103,7 +103,7 @@ fun DropdownMenuList(
                 .padding(top = 4.dp)
                 .clip(shape = RoundedCornerShape(4.dp))
                 .fillMaxWidth()
-                //.preferredHeightIn(maxHeight = 300.dp)
+
         ) {
             LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
                 items(options) { option ->
@@ -130,7 +130,8 @@ fun DropdownMenuListRow(
         modifier = Modifier
             .padding(vertical = 4.dp)
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 4.dp)
+            .background(Color.White),
         style = MaterialTheme.typography.body1,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1

@@ -12,6 +12,7 @@ import com.moin.currency_converter.data.local.LocalCCDataSourceImpl
 import com.moin.currency_converter.data.local.LocalConvertedCurrency
 import com.moin.currency_converter.data.remote.OpenExchangeAPIImpl
 import com.squareup.sqldelight.db.SqlDriver
+import dev.tmapps.konnection.Konnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,22 +24,30 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.JsonObject
 import kotlin.math.roundToInt
 
-class CurrencyViewModel(sqlDriver: SqlDriver) {
+class CurrencyViewModel(sqlDriver: SqlDriver, konnection: Konnection) {
     private val viewModelScope = CoroutineScope(Dispatchers.Main)
     var exchangeAPI = OpenExchangeAPIImpl()
     var localCCDataSource = LocalCCDataSourceImpl(CCDatabase(sqlDriver))
     val state = MutableStateFlow<CurrencyListState>(CurrencyListState.Loading)
     val gridState = MutableStateFlow<CurrencyGridState>(CurrencyGridState.Loading)
 
+
+
     init {
         viewModelScope.launch(Dispatchers.Main) {
-            try {
-                val currJsonObj = exchangeAPI.getCurrencies()
-                val currencyList = parseCurrencies(currJsonObj)
-                state.emit(CurrencyListState.Success(currencyList))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                CurrencyListState.Error(e.message ?: "something went wrong")
+            val isConnected = konnection.isConnected()
+            if (isConnected) {
+                try {
+                    val currJsonObj = exchangeAPI.getCurrencies()
+                    val currencyList = parseCurrencies(currJsonObj)
+                    state.emit(CurrencyListState.Success(currencyList))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    state.emit(CurrencyListState.Error(e.message ?: "something went wrong"))
+                }
+            }
+            else{
+                state.emit( CurrencyListState.Error("Internet is not connected"))
             }
         }
     }

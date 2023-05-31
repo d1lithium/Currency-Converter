@@ -9,6 +9,7 @@ import com.moin.currency_converter.data.CurrencyGridState
 import com.moin.currency_converter.data.local.DatabaseDriverFactory
 import com.moin.currency_converter.data.local.LocalConvertedCurrency
 import com.squareup.sqldelight.db.SqlDriver
+import dev.tmapps.konnection.Konnection
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase
@@ -36,6 +37,7 @@ class CurrencyViewModelTest: TestCase() {
 
     private lateinit var viewModel: CurrencyViewModel
     private lateinit var sqlDriver: SqlDriver
+    private lateinit var konnection: Konnection
 
 
     @Before
@@ -43,6 +45,7 @@ class CurrencyViewModelTest: TestCase() {
         super.setUp()
         val context = ApplicationProvider.getApplicationContext<Context>()
         sqlDriver = DatabaseDriverFactory(context).createDriver()
+        konnection = Konnection(context, enableDebugLog = true)
         Dispatchers.setMain(testDispatcher)
 
 
@@ -52,7 +55,8 @@ class CurrencyViewModelTest: TestCase() {
 
     @Test
     fun `getLatest_emit_success`() = kotlinx.coroutines.test.runTest {
-        viewModel = CurrencyViewModel(sqlDriver)
+
+        viewModel = CurrencyViewModel(sqlDriver,konnection)
         viewModel.exchangeAPI = mockk()
         viewModel.localCCDataSource = mockk()
         coEvery {
@@ -80,7 +84,7 @@ class CurrencyViewModelTest: TestCase() {
 
     @Test
     fun `getLatest_emit_error`() = kotlinx.coroutines.test.runTest {
-        viewModel = CurrencyViewModel(sqlDriver)
+        viewModel = CurrencyViewModel(sqlDriver,konnection)
         viewModel.exchangeAPI = mockk()
         viewModel.localCCDataSource = mockk()
         coEvery {

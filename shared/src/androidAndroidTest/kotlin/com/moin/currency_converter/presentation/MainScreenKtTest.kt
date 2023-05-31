@@ -17,6 +17,7 @@ import com.moin.currency_converter.data.local.DatabaseDriverFactory
 import com.moin.currency_converter.data.local.LocalConvertedCurrency
 import com.moin.currency_converter.domain.CurrencyViewModel
 import com.squareup.sqldelight.db.SqlDriver
+import dev.tmapps.konnection.Konnection
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase
@@ -49,6 +50,7 @@ class MainScreenKtTest: TestCase() {
 
     private lateinit var viewModel: CurrencyViewModel
     private lateinit var sqlDriver: SqlDriver
+    private lateinit var konnection: Konnection
 
 
     @Before
@@ -56,6 +58,7 @@ class MainScreenKtTest: TestCase() {
         super.setUp()
         val context = ApplicationProvider.getApplicationContext<Context>()
         sqlDriver = DatabaseDriverFactory(context).createDriver()
+        konnection = Konnection(context, enableDebugLog = true)
         Dispatchers.setMain(testDispatcher)
 
 
@@ -69,7 +72,7 @@ class MainScreenKtTest: TestCase() {
 
     @Test
     fun mainScreen() = kotlinx.coroutines.test.runTest {
-        viewModel = CurrencyViewModel(sqlDriver)
+        viewModel = CurrencyViewModel(sqlDriver,konnection)
         viewModel.exchangeAPI = mockk()
         viewModel.localCCDataSource = mockk()
         coEvery {
@@ -89,7 +92,7 @@ class MainScreenKtTest: TestCase() {
                     modifier = Modifier.fillMaxSize(),
                     color = Color.White
                 ) {
-                    MainViewAndroid( sqlDriver)
+                    MainViewAndroid(sqlDriver, konnection)
 
                 }
             }
