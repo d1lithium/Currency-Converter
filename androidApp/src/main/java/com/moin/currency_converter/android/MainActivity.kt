@@ -8,11 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -20,12 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.moin.currency_converter.MainViewAndroid
-import com.moin.currency_converter.PermissionUtil
-import com.moin.currency_converter.data.Currency
-import com.moin.currency_converter.data.CurrencyListState
 import com.moin.currency_converter.data.local.DatabaseDriverFactory
-import com.moin.currency_converter.domain.CurrencyViewModel
-import com.moin.currency_converter.presentation.*
 
 @Composable
 fun MyApplicationTheme(
