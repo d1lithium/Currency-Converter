@@ -65,12 +65,6 @@ class CurrencyViewModelTest: TestCase() {
             viewModel.exchangeAPI.getHistoricalRates()}.returns(JsonObject(mapOf()))
         coEvery {
             viewModel.exchangeAPI.getCurrencies()}.returns(JsonObject(mapOf()))
-
-
-         coEvery {viewModel.localCCDataSource.getAllCCRows()}.returns(listOf(
-             LocalConvertedCurrency(id=23469, base="USD", code="AED", name="", value_=3.672961.toString(), created="2023-05-30T00:29:29.474".toLocalDateTime()),
-             LocalConvertedCurrency(id=23470, base="USD", code="AFN", name="", value_=86.090416.toString(), created="2023-05-30T00:29:29.476".toLocalDateTime())
-         ))
         coEvery {viewModel.localCCDataSource.getAllCCRows()}.returns(listOf(
             LocalConvertedCurrency(id=23469, base="USD", code="AED", name="", value_=3.672961.toString(), created="2023-05-30T00:29:29.474".toLocalDateTime()),
             LocalConvertedCurrency(id=23470, base="USD", code="AFN", name="", value_=86.090416.toString(), created="2023-05-30T00:29:29.476".toLocalDateTime())
@@ -91,5 +85,33 @@ class CurrencyViewModelTest: TestCase() {
         println("gridState: "+viewModel.gridState.value)
         assertEquals(expectedGridState, viewModel.gridState.value)
         println("test ended")
+    }
+
+    @Test
+    fun getLatest_emit_error() = kotlinx.coroutines.test.runTest {
+        viewModel = CurrencyViewModel(sqlDriver)
+        viewModel.exchangeAPI = mockk()
+        viewModel.localCCDataSource = mockk()
+        coEvery {
+            viewModel.exchangeAPI.getHistoricalRates()}.returns(JsonObject(mapOf()))
+        coEvery {
+            viewModel.exchangeAPI.getCurrencies()}.returns(JsonObject(mapOf()))
+        coEvery {viewModel.localCCDataSource.getAllCCRows()}.returns(listOf(
+            LocalConvertedCurrency(id=23469, base="USD", code="AED", name="", value_=3.672961.toString(), created="2023-05-30T00:29:29.474".toLocalDateTime()),
+            LocalConvertedCurrency(id=23470, base="USD", code="AFN", name="", value_=86.090416.toString(), created="2023-05-30T00:29:29.476".toLocalDateTime())
+        ))
+        coEvery {viewModel.localCCDataSource.deleteAllCCRows()}.returns(Unit)
+        coEvery {viewModel.localCCDataSource.insertCCRow(any())}.returns(Unit)
+
+        viewModel.getLatest("USD","null")
+
+        val expectedConvertedCurrencyList = listOf(
+            ConvertedCurrency(code="AED", name="", value="36.72"),
+            ConvertedCurrency(code="AFN", name="", value="860.90")
+        )
+        val expectedGridState = CurrencyGridState.Error(message = "For input string: \"null\"")
+
+        testDispatcher.scheduler.advanceUntilIdle()
+        assertEquals(expectedGridState, viewModel.gridState.value)
     }
 }
