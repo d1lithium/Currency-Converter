@@ -1,6 +1,9 @@
+@file:OptIn(ExperimentalComposeUiApi::class)
+
 package com.moin.currency_converter.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -10,9 +13,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,8 +35,10 @@ import com.moin.currency_converter.getFilteredCurrencyList
 import com.moin.currency_converter.style.Palette
 import kotlin.random.Random
 
+
 @Composable
 internal fun MainScreen(viewModel: CurrencyViewModel) {
+   val keyboardCtrlr = LocalSoftwareKeyboardController.current
     val state by viewModel.state.collectAsState()
     val gridState by viewModel.gridState.collectAsState()
     var inputText by remember { mutableStateOf("") }
@@ -96,7 +104,7 @@ internal fun MainScreen(viewModel: CurrencyViewModel) {
                             columns = GridCells.Adaptive(120.dp),
                             content = {
                                 items(updatedCurrencyList.zip(rndmClrs)) { (currencyObj, clr) ->
-                                    CurrencyTile(currencyObj,clr)
+                                    CurrencyTile(currencyObj,clr, keyboardCtrlr)
                                 }
                             }
                         )
@@ -122,11 +130,16 @@ fun DropDown(result: List<Currency>): Pair<Boolean, String> {
 }
 
 @Composable
-fun CurrencyTile(currencyObj: ConvertedCurrency, clr: Color) {
+fun CurrencyTile(
+    currencyObj: ConvertedCurrency,
+    clr: Color,
+    keyboardCtrlr: SoftwareKeyboardController?
+) {
     Box(
         modifier = Modifier.padding(5.dp).aspectRatio(1f).clip(RoundedCornerShape(5.dp))
-            .background(clr),
-        contentAlignment = Alignment.Center
+            .background(clr)
+            .clickable { keyboardCtrlr!!.hide() },
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = Modifier.padding(5.dp),
