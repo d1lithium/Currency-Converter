@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -26,6 +27,7 @@ import com.moin.currency_converter.data.CurrencyListState
 import com.moin.currency_converter.domain.CurrencyViewModel
 import com.moin.currency_converter.getFilteredCurrencyList
 import com.moin.currency_converter.style.Palette
+import kotlin.random.Random
 
 @Composable
 internal fun MainScreen(viewModel: CurrencyViewModel) {
@@ -89,11 +91,12 @@ internal fun MainScreen(viewModel: CurrencyViewModel) {
                     is CurrencyGridState.Success -> {
                         val updatedCurrencyList =
                             getFilteredCurrencyList(result.list, dropDownPair.second)
+                        val rndmClrs = generateRandomColors(updatedCurrencyList.size)
                         LazyVerticalGrid(
                             columns = GridCells.Adaptive(120.dp),
                             content = {
-                                items(updatedCurrencyList) { currencyObj ->
-                                    CurrencyTile(currencyObj)
+                                items(updatedCurrencyList.zip(rndmClrs)) { (currencyObj, clr) ->
+                                    CurrencyTile(currencyObj,clr)
                                 }
                             }
                         )
@@ -119,10 +122,10 @@ fun DropDown(result: List<Currency>): Pair<Boolean, String> {
 }
 
 @Composable
-fun CurrencyTile(currencyObj: ConvertedCurrency) {
+fun CurrencyTile(currencyObj: ConvertedCurrency, clr: Color) {
     Box(
         modifier = Modifier.padding(5.dp).aspectRatio(1f).clip(RoundedCornerShape(5.dp))
-            .background(Palette.LightBlue),
+            .background(clr),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -143,3 +146,17 @@ fun CurrencyTile(currencyObj: ConvertedCurrency) {
         }
     }
 }
+
+fun generateRandomColor(): Color {
+    return Color(
+        red = Random.nextFloat(),
+        blue = Random.nextFloat(),
+        green = Random.nextFloat(),
+        alpha = 1f
+    )
+}
+
+fun generateRandomColors(count: Int): List<Color>{
+   return List(count){ generateRandomColor() }
+}
+
