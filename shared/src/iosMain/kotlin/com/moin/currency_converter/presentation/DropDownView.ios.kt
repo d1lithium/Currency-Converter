@@ -32,6 +32,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.window.Popup
 import com.moin.currency_converter.style.Palette
 
 
@@ -42,20 +45,16 @@ actual fun DropDownView(
     listItems: List<String>,
     selectedItem: String
 ):Pair<Boolean,String> {
-    var mutableExpanded  by remember { mutableStateOf(expanded)}
+    var isDropDownExpanded  by remember { mutableStateOf(expanded)}
     var selectedItem by remember { mutableStateOf(selectedItem) }
+    var dropDownViewSize by remember{ mutableStateOf(IntSize.Zero) }
 
     Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = Palette.LightBlue,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .background(Palette.LightBlue, shape = RoundedCornerShape(8.dp))
+        modifier = modifier.onGloballyPositioned { layoutCoordinates ->
+            dropDownViewSize = layoutCoordinates.size
+        }
     ) {
+
         ClickableText(
             text = buildAnnotatedString {
                     withStyle(SpanStyle(color = Color.Black)) {
@@ -63,14 +62,14 @@ actual fun DropDownView(
                     }
             },
             onClick = {
-                mutableExpanded = !mutableExpanded
+                isDropDownExpanded = !isDropDownExpanded
             },
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth()
         )
         Icon(
-            imageVector = if (mutableExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+            imageVector = if (isDropDownExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
             contentDescription = "drop down icon",
             tint = Color.Black,
             modifier = Modifier
@@ -82,38 +81,53 @@ actual fun DropDownView(
         options = listItems,
         onSelectedAction = { option ->
             selectedItem = option
-            mutableExpanded = false
+            isDropDownExpanded = false
         },
-        mutableExpanded = mutableExpanded
+        isDropDownExpanded = isDropDownExpanded,
+        onDismissRequest = {isDropDownExpanded = false},
+        dropDownViewSize
+
     )
-    return Pair(mutableExpanded,selectedItem)
+    return Pair(isDropDownExpanded,selectedItem)
 }
 
 @Composable
 fun DropdownMenuList(
     options: List<String>,
     onSelectedAction: (String) -> Unit,
-    mutableExpanded: Boolean
+    isDropDownExpanded: Boolean,
+    onDismissRequest: () -> Unit,
+    dropDownViewSize: IntSize
 ) {
-    if (mutableExpanded) {
-        Surface(
-            shape = RoundedCornerShape(4.dp),
-            elevation = 2.dp,
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .clip(shape = RoundedCornerShape(4.dp))
-                .fillMaxWidth()
+    if (isDropDownExpanded) {
+      Popup(alignment = Alignment.TopStart,
+            onDismissRequest = onDismissRequest,
+            focusable = true) {
+          Surface(
+              shape = RoundedCornerShape(8.dp),
+              elevation = 2.dp,
+              modifier = Modifier
+                  .clip(shape = RoundedCornerShape(16.dp))
+                  .width(150.dp)
+                  .height(400.dp)
+                  .padding(16.dp)
+                  .border(
+                      width = 2.dp,
+                      color = Palette.LightBlue,
+                      shape = RoundedCornerShape(8.dp)
+                  )
 
-        ) {
-            LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-                items(options) { option ->
-                    DropdownMenuListRow(
-                        option = option,
-                        onSelectedAction = onSelectedAction
-                    )
-                }
-            }
-        }
+          ) {
+              LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
+                  items(options) { option ->
+                      DropdownMenuListRow(
+                          option = option,
+                          onSelectedAction = onSelectedAction
+                      )
+                  }
+              }
+          }
+      }
     }
 }
 
@@ -123,13 +137,13 @@ fun DropdownMenuListRow(
     onSelectedAction: (String) -> Unit
 ) {
     ClickableText(
-        text = AnnotatedString(option),
+        text = AnnotatedString(option.trim()),
         onClick = { offset ->
             onSelectedAction(option)
         },
         modifier = Modifier
             .padding(vertical = 4.dp)
-            .fillMaxWidth()
+            .wrapContentSize()
             .padding(horizontal = 4.dp)
             .background(Color.White),
         style = MaterialTheme.typography.body1,

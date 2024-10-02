@@ -3,6 +3,7 @@
 package com.moin.currency_converter.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -121,7 +122,15 @@ fun DropDown(result: List<Currency>): Pair<Boolean, String> {
     val expanded by remember { mutableStateOf(false) }
     val selectedItem by remember { mutableStateOf(currencyListItems[0]) }
     val (isExpanded, selectedCurrency) = DropDownView(
-        modifier = Modifier.background(color = Palette.LightBlue).fillMaxSize(),
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxWidth()
+            .border(
+                width = 2.dp,
+                color = Palette.LightBlue,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .background(Palette.LightBlue, shape = RoundedCornerShape(8.dp)),
         expanded = expanded,
         listItems = currencyListItems,
         selectedItem = selectedItem
@@ -129,6 +138,7 @@ fun DropDown(result: List<Currency>): Pair<Boolean, String> {
     return Pair(isExpanded, selectedCurrency)
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CurrencyTile(
     currencyObj: ConvertedCurrency,
@@ -162,9 +172,9 @@ fun CurrencyTile(
 
 fun generateRandomColor(): Color {
     return Color(
-        red = Random.nextFloat(),
-        blue = Random.nextFloat(),
-        green = Random.nextFloat(),
+        red = Random.nextFloat().coerceIn(0.7f, 1f),
+        blue = Random.nextFloat().coerceIn(0.7f, 1f),
+        green = Random.nextFloat().coerceIn(0.7f, 1f),
         alpha = 1f
     )
 }
